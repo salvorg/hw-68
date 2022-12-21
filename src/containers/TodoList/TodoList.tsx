@@ -20,8 +20,9 @@ const TodoList = () => {
         <h4 className="m-2">To Do List</h4>
         {todoListLoading && <Spinner/>}
       </div>
+      {todoListValue && <p>ToDo is empty!</p>}
       {todoListValue.map(item => (
-        <TodoListItem key={Math.random()} props={item}/>
+        <TodoListItem key={item.id} props={item}/>
       ))}
     </div>
   );

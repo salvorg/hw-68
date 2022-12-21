@@ -6,9 +6,9 @@ interface TodoState {
   value: TaskMutation[];
   loading: boolean;
   error: boolean;
-  updateLoading: boolean;
+  updateLoading: boolean | string;
   onFormLoading: boolean;
-  onDeleteLoading: boolean;
+  onDeleteLoading: boolean | string;
 }
 
 const initialState: TodoState = {
@@ -41,16 +41,21 @@ export const changeStatus = createAsyncThunk<void, TaskMutation>(
   },
 );
 
-export const fetchTodoList = createAsyncThunk(
+export const fetchTodoList = createAsyncThunk<TaskMutation[]>(
   'todoList/fetch',
   async () => {
-    const response = await axiosApi.get<ApiTaskList>('/tasks.json');
+    const response = await axiosApi.get<ApiTaskList | null>('/tasks.json');
+    const tasks = response.data;
 
-    return Object.keys(response.data).map(id => {
-      const task = response.data[id];
-      return {...task, id};
-    }).reverse();
-  },
+    if (tasks) {
+      return Object.keys(tasks).map(id => {
+        const task = tasks[id];
+        return {...task, id};
+      }).reverse();
+    }
+
+    return [];
+  }
 );
 
 export const todoListSlice = createSlice({
@@ -71,8 +76,8 @@ export const todoListSlice = createSlice({
       state.error = true;
     });
 
-    builder.addCase(changeStatus.pending, (state) => {
-      state.updateLoading = true;
+    builder.addCase(changeStatus.pending, (state, action) => {
+      state.updateLoading = action.meta.arg.id;
     });
     builder.addCase(changeStatus.fulfilled, (state) => {
       state.updateLoading = false;
@@ -91,8 +96,8 @@ export const todoListSlice = createSlice({
       state.onFormLoading = false;
     });
 
-    builder.addCase(deleteTask.pending, (state) => {
-      state.onDeleteLoading = true;
+    builder.addCase(deleteTask.pending, (state, {meta}) => {
+      state.onDeleteLoading = meta.arg;
     });
     builder.addCase(deleteTask.fulfilled, (state) => {
       state.onDeleteLoading = false;

@@ -1,18 +1,17 @@
 import React, {useState} from 'react';
 import {TaskMutation} from "../../types";
-import {useAppDispatch} from "../../app/hooks";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {changeStatus, deleteTask, fetchTodoList} from "./TodoListSlice";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import ButtonSpinner from "../../components/Spinner/ButtonSpinner";
-import Spinner from "../../components/Spinner/Spinner";
 
 interface Props {
   props: TaskMutation;
 }
 
 const  TodoListItem: React.FC<Props> = ({props}) => {
-  const updateLoading = useSelector((state: RootState) => state.list.updateLoading);
+  const updateLoading = useAppSelector((state: RootState) => state.list.updateLoading);
 
   const dispatch = useAppDispatch();
   const onDeleteLoading = useSelector((state: RootState) => state.list.onDeleteLoading);
@@ -39,7 +38,7 @@ const  TodoListItem: React.FC<Props> = ({props}) => {
         <input type="checkbox"
                checked={props.status}
                onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target.checked)}/>
-        <button className='btn btn-danger ms-4' disabled={disabled} id={props.id} onClick={onDelete}>{onDeleteLoading && <ButtonSpinner/>}Delete</button>
+        <button className='btn btn-danger ms-4' disabled={disabled} id={props.id} onClick={onDelete}>{onDeleteLoading && onDeleteLoading === props.id && <ButtonSpinner/>}Delete</button>
       </div>
     </div>
   );
