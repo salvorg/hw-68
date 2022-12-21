@@ -2,10 +2,14 @@ import React, {useState} from 'react';
 import {fetchTodoList, onFormSubmit} from "../../containers/TodoList/TodoListSlice";
 import {useAppDispatch} from "../../app/hooks";
 import {Task} from "../../types";
+import {useSelector} from "react-redux";
+import {RootState} from "../../app/store";
+import ButtonSpinner from "../Spinner/ButtonSpinner";
 
 const TaskForm = () => {
   const [task, setTask] = useState<Task>({title: '', status: false});
   const dispatch = useAppDispatch();
+  const onFormLoading = useSelector((state: RootState) => state.list.onFormLoading);
 
   const createTask = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTask(prev => ({...prev, title: e.target.value, status: false}));
@@ -29,7 +33,7 @@ const TaskForm = () => {
                value={task.title}
                onChange={createTask}/>
       </div>
-      <button className='btn btn-primary mt-4' type='submit'>Add</button>
+      <button disabled={onFormLoading} className='btn btn-primary mt-4' type='submit'>{onFormLoading && <ButtonSpinner/>}Add</button>
     </form>
   );
 };

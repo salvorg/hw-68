@@ -7,6 +7,8 @@ interface TodoState {
   loading: boolean;
   error: boolean;
   updateLoading: boolean;
+  onFormLoading: boolean;
+  onDeleteLoading: boolean;
 }
 
 const initialState: TodoState = {
@@ -14,6 +16,8 @@ const initialState: TodoState = {
   loading: false,
   error: false,
   updateLoading: false,
+  onFormLoading: false,
+  onDeleteLoading: false,
 };
 
 export const onFormSubmit = createAsyncThunk<void, Task>(
@@ -61,7 +65,6 @@ export const todoListSlice = createSlice({
     builder.addCase(fetchTodoList.fulfilled, (state, action) => {
       state.loading = false;
       state.value = action.payload;
-      // console.log(action.payload);
     });
     builder.addCase(fetchTodoList.rejected, (state) => {
       state.loading = false;
@@ -70,15 +73,32 @@ export const todoListSlice = createSlice({
 
     builder.addCase(changeStatus.pending, (state) => {
       state.updateLoading = true;
-      state.error = false;
     });
     builder.addCase(changeStatus.fulfilled, (state) => {
       state.updateLoading = false;
-      // console.log(action.payload);
     });
     builder.addCase(changeStatus.rejected, (state) => {
       state.updateLoading = false;
-      state.error = true;
+    });
+
+    builder.addCase(onFormSubmit.pending, (state) => {
+      state.onFormLoading = true;
+    });
+    builder.addCase(onFormSubmit.fulfilled, (state) => {
+      state.onFormLoading = false;
+    });
+    builder.addCase(onFormSubmit.rejected, (state) => {
+      state.onFormLoading = false;
+    });
+
+    builder.addCase(deleteTask.pending, (state) => {
+      state.onDeleteLoading = true;
+    });
+    builder.addCase(deleteTask.fulfilled, (state) => {
+      state.onDeleteLoading = false;
+    });
+    builder.addCase(deleteTask.rejected, (state) => {
+      state.onDeleteLoading = false;
     });
   },
 });
