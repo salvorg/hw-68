@@ -16,11 +16,11 @@ const TodoList = () => {
 
   return (
     <div className='w-50 me-5 container-fluid'>
-      <div className="d-flex">
-        <h4 className="m-2">To Do List</h4>
+      <div className='d-flex'>
+        <h4 className='m-3'>To Do List</h4>
         {todoListLoading && <Spinner/>}
       </div>
-      {todoListValue && <p>ToDo is empty!</p>}
+      {!todoListValue.length && <p className='fs-3'>To Do List is empty!</p>}
       {todoListValue.map(item => (
         <TodoListItem key={item.id} props={item}/>
       ))}

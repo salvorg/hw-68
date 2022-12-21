@@ -31,14 +31,15 @@ const  TodoListItem: React.FC<Props> = ({props}) => {
   };
 
   return (
-    <div className='border border-1 d-flex justify-content-between p-2 mb-3'>
+    <div className='border border-1 rounded d-flex justify-content-between p-3 mb-3'>
       <h4>{props.title}</h4>
-      <div className="d-flex align-items-center">
+      <div className='d-flex align-items-center'>
         {updateLoading && updateLoading === props.id && (<ButtonSpinner/>)}
-        <input type="checkbox"
+        <input type='checkbox'
+               className='form-check-input'
                checked={props.status}
                onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target.checked)}/>
-        <button className='btn btn-danger ms-4' disabled={disabled} id={props.id} onClick={onDelete}>{onDeleteLoading && onDeleteLoading === props.id && <ButtonSpinner/>}Delete</button>
+        <button className='btn btn-danger ms-4 p-2' disabled={disabled} id={props.id} onClick={onDelete}>{onDeleteLoading && onDeleteLoading === props.id && <ButtonSpinner/>}Delete</button>
       </div>
     </div>
   );

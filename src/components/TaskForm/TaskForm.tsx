@@ -25,8 +25,8 @@ const TaskForm = () => {
 
   return (
     <form onSubmit={onSubmit} className='container-fluid w-50 ms-5'>
-      <h4 className='m-2'>Add new task</h4>
-      <div className="form-group">
+      <h4 className='m-3'>Add new task</h4>
+      <div className='form-group'>
         <input type="text" name='title'
                className='form-control'
                placeholder='Title'
